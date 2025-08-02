@@ -1,36 +1,55 @@
-const path = require('path');
-const { app, BrowserWindow } = require('electron');
+import path from 'path';
+import { app, BrowserWindow } from 'electron';
+import { WindowManager } from '../modules/WindowManager';
+import { TrayManager } from '../modules/TrayManager';
+import { SecurityManager } from '../modules/security';
+import { CONFIG } from '../modules/config';
 
-function createWindow() {
-  const win = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    title: 'Messtron',
-    icon: path.join(__dirname, '..', 'assets', 'icon.png'),
-    webPreferences: {
-      contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js'),
-    },
-  });
+let windowManager: WindowManager | null = null;
+let trayManager: TrayManager | null = null;
+let securityManager: SecurityManager | null = null;
 
-  win.setMenuBarVisibility(false);
-  win.loadURL('https://www.messenger.com');
+async function initializeApp(): Promise<void> {
+  try {
+    // Initialize managers
+    windowManager = new WindowManager(CONFIG);
+    trayManager = new TrayManager(CONFIG, windowManager);
+    securityManager = new SecurityManager();
 
-  win.on('page-title-updated', (e: Electron.Event) => {
-    e.preventDefault();
-  });
+    // Create window and tray
+    await windowManager.createWindow();
+    trayManager.createTray();
 
-  win.webContents.on('did-finish-load', () => {
-    win.webContents.executeJavaScript(`window.darkMode?.apply();`);
-  });
+    // Set up security
+    securityManager.setupSecurity();
+
+    // Set app user model ID for Windows notifications
+    if (process.platform === 'win32') {
+      app.setAppUserModelId(CONFIG.app.name);
+    }
+  } catch (error) {
+    console.error('Failed to initialize app:', error);
+  }
 }
 
-app.whenReady().then(createWindow);
+// App event handlers
+app.whenReady().then(initializeApp);
 
-app.on('activate', function () {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow();
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    windowManager?.createWindow();
+  } else {
+    windowManager?.showWindow();
+  }
 });
 
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit();
+app.on('window-all-closed', () => {
+  // Keep app running in background with tray
+  if (process.platform === 'darwin' && !windowManager?.isQuitting) {
+    app.dock?.hide();
+  }
+});
+
+app.on('before-quit', () => {
+  windowManager?.setQuitting(true);
 });
