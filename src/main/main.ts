@@ -3,9 +3,9 @@ const { app, BrowserWindow } = require('electron');
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1000,
+    width: 1200,
     height: 800,
-    title: 'Messenger Desktop',
+    title: 'Messtron',
     icon: path.join(__dirname, '..', 'assets', 'icon.png'),
     webPreferences: {
       contextIsolation: true,
@@ -15,6 +15,10 @@ function createWindow() {
 
   win.setMenuBarVisibility(false);
   win.loadURL('https://www.messenger.com');
+
+  win.on('page-title-updated', (e: Electron.Event) => {
+    e.preventDefault();
+  });
 
   win.webContents.on('did-finish-load', () => {
     win.webContents.executeJavaScript(`window.darkMode?.apply();`);

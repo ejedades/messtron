@@ -1,15 +1,20 @@
 {
   "name": "messtron",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "dist/main/main.js",
   "scripts": {
-    "start": "electron ."
+    "start:compiled": "tsc && electron .",
+    "build": "npx --package typescript tsc",
+    "dev": "nodemon --watch src --ext ts --exec \"npm run start:compiled\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "electron": "^37.2.5"
+    "@types/node": "^20.0.0",
+    "electron": "^37.2.5",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.9.2"
   }
 }
