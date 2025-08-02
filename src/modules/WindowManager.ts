@@ -35,13 +35,19 @@ export class WindowManager {
           nodeIntegration: false,
           webSecurity: true,
           preload: path.join(__dirname, this.config.paths.preload),
+          partition: 'persist:messenger',
         },
         titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
       });
 
+      this.mainWindow.webContents.setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      );
+
       this.setupWindowEvents();
       this.setupSecurityHandlers();
       
+      await new Promise(resolve => setTimeout(resolve, 1000));
       await this.mainWindow.loadURL(this.config.app.url);
       this.mainWindow.setMenuBarVisibility(false);
 
@@ -69,11 +75,6 @@ export class WindowManager {
       }
     });
 
-    this.mainWindow.on('minimize', () => {
-      if (process.platform !== 'darwin') {
-        this.hideWindow();
-      }
-    });
 
     this.mainWindow.on('page-title-updated', (event) => {
       event.preventDefault();
