@@ -1,7 +1,7 @@
 export const CONFIG = {
   window: {
-    width: 1200,
-    height: 800,
+    width: 1400,
+    height: 900,
     minWidth: 800,
     minHeight: 600,
   },

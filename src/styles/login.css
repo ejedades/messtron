@@ -1,0 +1,202 @@
+/* Custom login page styles */
+body {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+}
+
+/* Outer container around login (e.g. logo + form) */
+._9vtf,
+._9vuh,
+.login_page_container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  margin: auto !important;
+}
+
+/* Login form container */
+#login_form,
+form,
+._55r1 {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 24px !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Ensure inputs stack properly */
+input {
+  width: 100% !important;
+  margin: 12px 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Override Messenger's wide-screen container shrink */
+._2k-y ._2kx3,
+._2kx3 {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+  flex-direction: column !important;
+}
+
+/* Hide the specific header */
+header._4n9r._8orh {
+  display: none !important;
+}
+
+/* Alternative: Hide by ID */
+#u_0_1_rm {
+  display: none !important;
+}
+
+/* Hide any header with role="banner" */
+[role="banner"] {
+  display: none !important;
+}
+
+/* Hide the main header container classes */
+._4n9r,
+._8orh {
+  display: none !important;
+}
+
+/* Hide the navigation elements inside */
+._1-l5,
+._1-kf,
+._1-kg,
+._2fux,
+._8otc {
+  display: none !important;
+}
+
+/* Hide the whole container around the heading */
+._6hp-._6hq0._6hq1 {
+  display: none !important;
+}
+
+/* Or hide just the heading */
+._6b6b {
+  display: none !important;
+}
+
+
+/* Hide the download buttons section */
+._4zlw {
+  display: none !important;
+}
+
+/* Hide download links by their content */
+a[href*="apps.apple.com"],
+a[href*="microsoft.com/en-us/p/messenger"],
+a[href*="play.google.com"] {
+  display: none !important;
+}
+
+/* Hide images with "Download" or "Get it" alt text */
+img[alt*="Download"],
+img[alt*="Get it"],
+img[alt*="App Store"],
+img[alt*="Google Play"],
+img[alt*="Microsoft"] {
+  display: none !important;
+}
+
+/* Hide the footer */
+footer._4sze {
+  display: none !important;
+}
+
+/* Hide footer by role */
+[role="contentinfo"] {
+  display: none !important;
+}
+
+/* Hide footer container classes */
+._4sze,
+._6ajd,
+._8v9m,
+._8on8,
+._asjj,
+._asc8 {
+  display: none !important;
+}
+
+/* Hide Meta logo and language selector */
+._6b6a,
+._8vbj,
+._ascc,
+._ascd {
+  display: none !important;
+}
+
+/* Hide any footer element */
+footer {
+  display: none !important;
+}
+
+/* Adjust body to remove any top spacing left by the header */
+body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Make sure the main content starts from the very top */
+#content,
+.login_page_container,
+[role="main"],
+body > div:first-child {
+  margin-top: 0 !important;
+  padding-top: 20px !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 20px !important;
+}
+
+/* Hide any floating/fixed positioned headers */
+header {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+}
+
+
+/* === Center form properly on wide windows === */
+._4wyl,
+._4wyq,
+._2k-y,
+._4w-r,
+._4wyu {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+}
+
+._6az_ {
+  display: flex !important;
+  flex-grow: 1 !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+

@@ -33,13 +33,19 @@ export class WindowManager {
         webPreferences: {
           contextIsolation: true,
           nodeIntegration: false,
+          nodeIntegrationInSubFrames: false,
+          nodeIntegrationInWorker: false,
           webSecurity: true,
           preload: path.join(__dirname, this.config.paths.preload),
+          // Enable session persistence to avoid repeated logins
           partition: 'persist:messenger',
+          // Allow Node.js APIs in preload script
+          sandbox: false,
         },
         titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
       });
 
+      // Set user agent to appear more like a regular browser
       this.mainWindow.webContents.setUserAgent(
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       );
@@ -47,6 +53,7 @@ export class WindowManager {
       this.setupWindowEvents();
       this.setupSecurityHandlers();
       
+      // Add a small delay before loading to avoid appearing too automated
       await new Promise(resolve => setTimeout(resolve, 1000));
       await this.mainWindow.loadURL(this.config.app.url);
       this.mainWindow.setMenuBarVisibility(false);
@@ -75,6 +82,8 @@ export class WindowManager {
       }
     });
 
+    // Remove the minimize event handler - let normal minimize behavior work
+    // Only hide to tray when explicitly closed, not minimized
 
     this.mainWindow.on('page-title-updated', (event) => {
       event.preventDefault();

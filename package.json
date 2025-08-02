@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "dist/main/main.js",
   "scripts": {
-    "start:compiled": "tsc && electron .",
-    "build": "npx --package typescript tsc",
-    "dev": "nodemon --watch src --ext ts --exec \"npm run start:compiled\""
+    "start:compiled": "tsc && npm run copy:assets && electron .",
+    "build": "npx --package typescript tsc && npm run copy:assets",
+    "copy:assets": "node -e \"const fs=require('fs'); const path=require('path'); const src='src/styles'; const dest='dist/styles'; if(fs.existsSync(src)){fs.mkdirSync(dest,{recursive:true}); fs.readdirSync(src).forEach(file=>{fs.copyFileSync(path.join(src,file),path.join(dest,file));}); console.log('Assets copied successfully');} else {console.log('No styles folder found');}\"",
+    "dev": "nodemon --watch src --ext ts,css --exec \"npm run start:compiled\""
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,7 @@
   "description": "",
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "cross-env": "^10.0.0",
     "electron": "^37.2.5",
     "nodemon": "^3.1.10",
     "typescript": "^5.9.2"
