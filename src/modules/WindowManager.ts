@@ -1,6 +1,8 @@
 import path from 'path';
 import { BrowserWindow, shell, dialog, app } from 'electron';
 import type { CONFIG } from './config';
+import { session } from 'electron';
+import { Notification } from 'electron';
 
 export class WindowManager {
   private mainWindow: BrowserWindow | null = null;
@@ -37,10 +39,8 @@ export class WindowManager {
           nodeIntegrationInWorker: false,
           webSecurity: true,
           preload: path.join(__dirname, this.config.paths.preload),
-          // Enable session persistence to avoid repeated logins
-          partition: 'persist:messenger',
-          // Allow Node.js APIs in preload script
-          sandbox: false,
+          session: session.fromPartition('persist:messenger'),
+          // sandbox: false,
         },
         titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
       });
@@ -82,11 +82,40 @@ export class WindowManager {
       }
     });
 
-    // Remove the minimize event handler - let normal minimize behavior work
-    // Only hide to tray when explicitly closed, not minimized
+    const notifiedTitles = new Map<string, number>();
+    const NOTIF_TTL = 5 * 60 * 1000;
 
-    this.mainWindow.on('page-title-updated', (event) => {
-      event.preventDefault();
+    // Cleanup old entries every minute
+    setInterval(() => {
+      const now = Date.now();
+      for (const [title, timestamp] of notifiedTitles.entries()) {
+        if (now - timestamp > NOTIF_TTL) {
+          notifiedTitles.delete(title);
+        }
+      }
+    }, 60 * 1000);
+
+    this.mainWindow.webContents.on('page-title-updated', (_event, title) => {
+      console.log('[DEBUG] Page title updated:', title);
+
+      const lowerTitle = title.toLowerCase();
+
+      if (lowerTitle.includes('messaged you')) {
+        const now = Date.now();
+        const lastNotifiedAt = notifiedTitles.get(title);
+
+        if (!lastNotifiedAt || now - lastNotifiedAt > NOTIF_TTL) {
+          notifiedTitles.set(title, now);
+          console.log('[DEBUG] Sending notification for sender:', title);
+
+          new Notification({
+            title: 'Messenger',
+            body: title,
+          }).show();
+        } else {
+          console.log('[DEBUG] Duplicate title notification skipped:', title);
+        }
+      }
     });
   }
 

@@ -1,4 +1,9 @@
 window.addEventListener('DOMContentLoaded', () => {
+  
+  const isLoginPage = () => {
+      return window.location.pathname.includes('/login') || !!document.querySelector('#login_form');
+  };
+
   const hideElements = () => {
     // Hide footer if it contains © Meta
     const footer = document.querySelector('footer[role="contentinfo"]');
@@ -82,6 +87,8 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.style.padding = '0';
   };
 
-  hideElements();
-  setTimeout(hideElements, 1000); // Retry for dynamic load
+  if (isLoginPage()) {
+    hideElements();
+    setTimeout(hideElements, 1000);
+  }
 });

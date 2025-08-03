@@ -4,6 +4,7 @@ import { WindowManager } from '../modules/WindowManager';
 import { TrayManager } from '../modules/TrayManager';
 import { SecurityManager } from '../modules/security';
 import { CONFIG } from '../modules/config';
+import { ipcMain, Notification } from 'electron';
 
 let windowManager: WindowManager | null = null;
 let trayManager: TrayManager | null = null;
@@ -22,6 +23,10 @@ async function initializeApp(): Promise<void> {
 
     // Set up security
     securityManager.setupSecurity();
+
+    ipcMain.on('notify', (_event, { title, body }) => {
+      new Notification({ title, body }).show();
+    });
 
     // Set app user model ID for Windows notifications
     if (process.platform === 'win32') {
